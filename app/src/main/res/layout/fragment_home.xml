@@ -7,6 +7,7 @@
     >
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/homeRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipChildren="false"
@@ -14,6 +15,9 @@
         android:orientation="vertical"
         android:paddingBottom="24dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home"
+        tools:listitem="@layout/view_holder_attraction"
+        tools:itemCount="5"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

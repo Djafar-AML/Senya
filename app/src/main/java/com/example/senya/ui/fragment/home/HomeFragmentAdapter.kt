@@ -1,12 +1,15 @@
 package com.example.senya.ui.fragment.home
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.example.senya.R
 import com.example.senya.data.Attraction
 import com.example.senya.databinding.ViewHolderAttractionBinding
+import com.example.senya.utils.loadByCoil
 import com.example.senya.utils.loadImageByPicasso
 
 class HomeFragmentAdapter(
@@ -50,11 +53,8 @@ class HomeFragmentAdapter(
 
                 titleTextView.text = attraction.title
                 monthsToVisitTextView.text = attraction.months_to_visit
-                headerImageView.loadImageByPicasso(
-                    attraction.image_urls[0],
-                    R.drawable.ic_flight_24
-                )
-
+                val imageUrl = attraction.image_urls[0]
+                headerImageView.loadByCoil(imageUrl)
                 root.setOnClickListener {
                     attractionOnClickCallback()
                 }

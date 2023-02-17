@@ -1,6 +1,8 @@
 package com.example.senya.utils
 
 import android.widget.ImageView
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.example.senya.R
 import com.squareup.picasso.Picasso
 
@@ -16,5 +18,15 @@ fun ImageView.loadImageByPicasso(
         .placeholder(placeholder)
         .error(error)
         .into(this)
+
+}
+
+fun ImageView.loadByCoil(imageUrl: String, placeholder: Int = R.drawable.ic_flight_24) {
+
+    this.load(imageUrl){
+        crossfade(true)
+        placeholder(placeholder)
+        transformations(CircleCropTransformation())
+    }
 
 }

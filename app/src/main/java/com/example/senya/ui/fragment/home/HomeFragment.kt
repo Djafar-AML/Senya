@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
 import com.example.senya.databinding.FragmentHomeBinding
 import com.example.senya.ui.fragment.BaseFragment
 
@@ -28,7 +30,7 @@ class HomeFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        homeAdapter.setData(emptyList())
+        homeAdapter.setData(attractions)
 
     }
 
@@ -37,6 +39,7 @@ class HomeFragment : BaseFragment() {
         val homeAdapter = HomeFragmentAdapter(::attractionOnClickCallback)
         binding.homeRecyclerView.apply {
             setHasFixedSize(true)
+            addItemDecoration(DividerItemDecoration(this.context, RecyclerView.VERTICAL))
             adapter = homeAdapter
         }
         return homeAdapter

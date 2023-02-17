@@ -9,4 +9,12 @@ abstract class BaseFragment : Fragment() {
         (activity as MainActivity).navController
     }
 
+    protected val activityHandler by lazy {
+        (activity as MainActivity)
+    }
+
+    protected val attractions by lazy {
+        activityHandler.attractionList
+    }
+
 }

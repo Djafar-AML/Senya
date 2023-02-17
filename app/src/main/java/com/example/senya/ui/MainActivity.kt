@@ -1,4 +1,4 @@
-package com.example.senya
+package com.example.senya.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

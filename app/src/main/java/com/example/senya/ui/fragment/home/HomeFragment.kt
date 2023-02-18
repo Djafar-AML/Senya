@@ -45,8 +45,10 @@ class HomeFragment : BaseFragment() {
         return homeAdapter
     }
 
-    private fun attractionOnClickCallback() {
-
+    private fun attractionOnClickCallback(attractionId: String) {
+        val toDetailFragment =
+            HomeFragmentDirections.actionHomeFragmentToAttractionDetailFragment(attractionId)
+        navController.navigate(toDetailFragment)
     }
 
     override fun onDestroyView() {

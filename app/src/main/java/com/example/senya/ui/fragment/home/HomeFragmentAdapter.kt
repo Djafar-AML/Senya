@@ -13,7 +13,7 @@ import com.example.senya.utils.loadByCoil
 import com.example.senya.utils.loadImageByPicasso
 
 class HomeFragmentAdapter(
-    private val attractionOnClickCallback: () -> Unit
+    private val attractionOnClickCallback: (String) -> Unit
 ) : RecyclerView.Adapter<HomeFragmentAdapter.AttractionViewHolder>() {
 
     private lateinit var ctx: Context
@@ -47,7 +47,7 @@ class HomeFragmentAdapter(
     inner class AttractionViewHolder(private val binding: ViewHolderAttractionBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun onBind(attraction: Attraction, attractionOnClickCallback: () -> Unit) {
+        fun onBind(attraction: Attraction, attractionOnClickCallback: (String) -> Unit) {
 
             binding.apply {
 
@@ -56,7 +56,7 @@ class HomeFragmentAdapter(
                 val imageUrl = attraction.image_urls[0]
                 headerImageView.loadByCoil(imageUrl)
                 root.setOnClickListener {
-                    attractionOnClickCallback()
+                    attractionOnClickCallback(attraction.id)
                 }
 
             }

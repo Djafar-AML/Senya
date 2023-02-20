@@ -45,6 +45,10 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
     }
 
+    private fun initAppBarConfiguration(): AppBarConfiguration {
+        return AppBarConfiguration(navController.graph)
+    }
+
     private fun setupActionBar() {
         setupActionBarWithNavController(navController, appBarConfiguration)
     }
@@ -58,10 +62,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun parseRawAttractions(rawAttractions: String): List<Attraction> {
         return MoshiParse().parseRawAttractions(rawAttractions)
-    }
-
-    private fun initAppBarConfiguration(): AppBarConfiguration {
-        return AppBarConfiguration(navController.graph)
     }
 
 }

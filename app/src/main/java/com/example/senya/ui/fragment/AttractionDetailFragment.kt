@@ -21,10 +21,6 @@ class AttractionDetailFragment : BaseFragment() {
         findAttractionById(safeArgs.attractionId)
     }
 
-    private fun findAttractionById(attractionId: String): Attraction {
-        return attractions.find { it.id == attractionId } ?: Attraction()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -60,6 +56,10 @@ class AttractionDetailFragment : BaseFragment() {
 //            }
 
         }
+    }
+
+    private fun findAttractionById(attractionId: String): Attraction {
+        return attractions.find { it.id == attractionId } ?: Attraction()
     }
 
     override fun onDestroyView() {

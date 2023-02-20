@@ -12,17 +12,17 @@ class MoshiParse {
         Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
     }
 
-    private val moshiAdapter by lazy {
-        initMoshiAdapter()
+    private val jsonAdapter by lazy {
+        initJsonAdapter()
     }
 
-    private fun initMoshiAdapter(): JsonAdapter<AttractionsResponse>? {
+    private fun initJsonAdapter(): JsonAdapter<AttractionsResponse>? {
         val type = AttractionsResponse::class.java
         return moshi.adapter(type)
     }
 
     fun parseRawAttractions(rawAttractions: String): List<Attraction> {
-        return moshiAdapter?.fromJson(rawAttractions)?.attractions ?: emptyList()
+        return jsonAdapter?.fromJson(rawAttractions)?.attractions ?: emptyList()
     }
 
 }

@@ -6,11 +6,8 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.senya.R
 import com.example.senya.data.Attraction
-import com.example.senya.data.AttractionsResponse
 import com.example.senya.databinding.ActivityMainBinding
-import com.squareup.moshi.JsonAdapter
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.example.senya.utils.MoshiParse
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,13 +23,7 @@ class MainActivity : AppCompatActivity() {
     private val rawAttractions by lazy {
         readRawAttractions()
     }
-    private val moshi by lazy {
-        Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
-    }
 
-    private val moshiAdapter by lazy {
-        initMoshiAdapter()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,14 +41,8 @@ class MainActivity : AppCompatActivity() {
     private fun readRawAttractions() =
         resources.openRawResource(R.raw.croatia).bufferedReader().use { it.readText() }
 
-    private fun initMoshiAdapter(): JsonAdapter<AttractionsResponse>? {
-        val type = AttractionsResponse::class.java
-        return moshi.adapter(type)
-    }
-
-
     private fun parseRawAttractions(rawAttractions: String): List<Attraction> {
-        return moshiAdapter?.fromJson(rawAttractions)?.attractions ?: emptyList()
+        return MoshiParse().parseRawAttractions(rawAttractions)
     }
 
 }

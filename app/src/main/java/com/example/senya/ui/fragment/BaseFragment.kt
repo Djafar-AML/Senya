@@ -5,12 +5,13 @@ import com.example.senya.ui.MainActivity
 
 abstract class BaseFragment : Fragment() {
 
-    protected val navController by lazy {
-        (activity as MainActivity).navController
-    }
 
     protected val activityHandler by lazy {
         (activity as MainActivity)
+    }
+
+    protected val navController by lazy {
+        activityHandler.navController
     }
 
     protected val attractions by lazy {

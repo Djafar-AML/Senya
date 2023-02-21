@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import com.example.senya.R
 import com.example.senya.databinding.FragmentHomeBinding
 import com.example.senya.ui.fragment.BaseFragment
 
@@ -31,7 +32,41 @@ class HomeFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         homeAdapter.setData(attractions)
+        setActionBarTitle()
+        setupAdapterScrollListener()
 
+    }
+
+    private fun setActionBarTitle() {
+        binding.titleTextView.text = getString(R.string.home)
+    }
+
+    private fun setupAdapterScrollListener() {
+
+        val state = mutableListOf(0)
+
+        binding.homeRecyclerView.addOnScrollListener(
+            object : RecyclerView.OnScrollListener() {
+
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    state[0] = newState
+                }
+
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    if (dy > 0 && (state[0] == 0 || state[0] == 2)) {
+                        binding.actionBar.visibility = View.GONE
+                    } else {
+                        if (dy < -20) {
+                            binding.actionBar.visibility = View.VISIBLE
+                        }
+                    }
+                }
+
+            }
+        )
     }
 
     private fun initHomeFragmentAdapter(): HomeFragmentAdapter {

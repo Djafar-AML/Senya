@@ -1,5 +1,7 @@
 package com.example.senya.ui.fragment
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -32,11 +34,15 @@ class AttractionDetailFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        setActionBarTitle()
         initViews(attraction)
+        setupClickListeners()
 
     }
 
+    private fun setActionBarTitle() {
+        binding.actionBarTitleTextView.text = getString(R.string.attraction_action_bar_title, attraction.title)
+    }
     private fun initViews(_attraction: Attraction) {
 
         binding.apply {
@@ -48,15 +54,35 @@ class AttractionDetailFragment : BaseFragment() {
             headerImageView.loadByCoil(imageUrl)
             numberOfFactsTextView.text =
                 getString(R.string.attraction_facts_count, _attraction.facts.size)
-            numberOfFactsTextView.setOnClickListener {
-                // todo
-            }
-//            root.setOnClickListener {
-//                attractionOnClickCallback(this@AttractionDetailFragment.attraction.id)
-//            }
 
         }
     }
+    private fun setupClickListeners() {
+
+        binding.apply {
+
+            backImageView.setOnClickListener { popBackStack() }
+
+            mapImageView.setOnClickListener { openInGoogleMap(attraction) }
+
+            numberOfFactsTextView.setOnClickListener { // todo
+            }
+
+        }
+
+    }
+
+
+    private fun openInGoogleMap(_attraction: Attraction) {
+
+        val uri =
+            Uri.parse("geo:${_attraction.location.latitude},${attraction.location.longitude}")
+        val mapIntent = Intent(Intent.ACTION_VIEW, uri)
+        mapIntent.setPackage("com.google.android.apps.maps")
+        startActivity(mapIntent)
+
+    }
+
 
     private fun findAttractionById(attractionId: String): Attraction {
         return attractions.find { it.id == attractionId } ?: Attraction()

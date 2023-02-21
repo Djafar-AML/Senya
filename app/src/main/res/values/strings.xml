@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Senya</string>
     <string name="attraction_facts_count">%d facts</string>
+    <string name="location">Location</string>
+    <string name="home">Home</string>
+    <string name="attraction_action_bar_title">%s details</string>
 </resources>

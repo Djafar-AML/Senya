@@ -20,9 +20,7 @@ class AttractionDetailFragment : BaseFragment() {
 
     private val safeArgs: AttractionDetailFragmentArgs by navArgs()
 
-    private val attraction by lazy {
-        findAttractionById(safeArgs.attractionId)
-    }
+    private val attraction by lazy { findAttractionById(safeArgs.attractionId) }
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.navArgs
 import com.example.senya.R
 import com.example.senya.data.Attraction
@@ -41,8 +42,10 @@ class AttractionDetailFragment : BaseFragment() {
     }
 
     private fun setActionBarTitle() {
-        binding.actionBarTitleTextView.text = getString(R.string.attraction_action_bar_title, attraction.title)
+        binding.actionBarTitleTextView.text =
+            getString(R.string.attraction_action_bar_title, attraction.title)
     }
+
     private fun initViews(_attraction: Attraction) {
 
         binding.apply {
@@ -57,6 +60,7 @@ class AttractionDetailFragment : BaseFragment() {
 
         }
     }
+
     private fun setupClickListeners() {
 
         binding.apply {
@@ -65,7 +69,9 @@ class AttractionDetailFragment : BaseFragment() {
 
             mapImageView.setOnClickListener { openInGoogleMap(attraction) }
 
-            numberOfFactsTextView.setOnClickListener { // todo
+            numberOfFactsTextView.setOnClickListener {
+                val factsString = attractionFacts(attraction.facts)
+                factAlertDialog(factsString)
             }
 
         }
@@ -86,6 +92,32 @@ class AttractionDetailFragment : BaseFragment() {
 
     private fun findAttractionById(attractionId: String): Attraction {
         return attractions.find { it.id == attractionId } ?: Attraction()
+    }
+
+    private fun attractionFacts(facts: List<String>): String {
+
+        val stringBuilder = StringBuilder("")
+
+        facts.forEach {
+            stringBuilder.append("\u2022 $it")
+            stringBuilder.append("\n\n")
+        }
+
+        val stringifiedFacts = stringBuilder.toString()
+        return stringifiedFacts.substring(0, stringifiedFacts.lastIndexOf("\n\n"))
+
+    }
+
+    private fun factAlertDialog(factsString: String) {
+
+        AlertDialog.Builder(requireContext())
+            .setTitle("${attraction.title} facts")
+            .setMessage(factsString)
+            .setPositiveButton("Ok") { dialog, which ->
+                dialog.dismiss()
+            }
+            .show()
+
     }
 
     override fun onDestroyView() {

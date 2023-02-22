@@ -6,7 +6,6 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.senya.R
 import com.example.senya.data.Attraction
 import com.example.senya.databinding.ActivityMainBinding
@@ -36,7 +35,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupNavHostFragment()
-//        setupActionBar()
     }
 
     private fun setupNavHostFragment() {
@@ -47,10 +45,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun initAppBarConfiguration(): AppBarConfiguration {
         return AppBarConfiguration(navController.graph)
-    }
-
-    private fun setupActionBar() {
-        setupActionBarWithNavController(navController, appBarConfiguration)
     }
 
     override fun onSupportNavigateUp(): Boolean {

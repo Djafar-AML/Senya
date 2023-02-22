@@ -18,17 +18,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var navController: NavController
         private set
 
-    private val appBarConfiguration by lazy { initAppBarConfiguration() }
+    private val rawAttractions by lazy { readRawAttractions() }
 
-
-    val attractionList: List<Attraction> by lazy {
-        parseRawAttractions(rawAttractions)
-    }
-
-    private val rawAttractions by lazy {
-        readRawAttractions()
-    }
-
+    val attractionList: List<Attraction> by lazy { parseRawAttractions(rawAttractions) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,14 +33,6 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(binding.navHostFragment.id) as NavHostFragment
         navController = navHostFragment.navController
-    }
-
-    private fun initAppBarConfiguration(): AppBarConfiguration {
-        return AppBarConfiguration(navController.graph)
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
     private fun readRawAttractions() =

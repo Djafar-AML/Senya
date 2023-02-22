@@ -83,6 +83,7 @@
         android:textColor="@color/white"
         android:textSize="22sp"
         android:textStyle="bold"
+        android:fontFamily="@font/almendra"
         app:layout_constraintBottom_toBottomOf="@id/headerImageView"
         tools:text="Sali" />
 

@@ -2,6 +2,8 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'androidx.navigation.safeargs.kotlin'
+    id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
 }
 
 android {
@@ -36,6 +38,11 @@ android {
     }
 }
 
+// Allow references to generated code
+kapt {
+    correctErrorTypes true
+}
+
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.9.0'
@@ -53,6 +60,10 @@ dependencies {
     implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
     //coil
     implementation("io.coil-kt:coil:2.2.2")
+
+    // dagger di
+    implementation "com.google.dagger:hilt-android:2.44.2"
+    kapt "com.google.dagger:hilt-compiler:2.44.2"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

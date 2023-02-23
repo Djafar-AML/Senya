@@ -31,10 +31,16 @@ class HomeFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        homeAdapter.setData(attractions)
         setActionBarTitle()
+        setupObservers()
         setupAdapterScrollListener()
 
+    }
+
+    private fun setupObservers() {
+        activityViewModel.attractionListLiveData.observe(viewLifecycleOwner) { attractions ->
+            homeAdapter.setData(attractions)
+        }
     }
 
     private fun setActionBarTitle() {
@@ -81,6 +87,7 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun attractionOnClickCallback(attractionId: String) {
+        activityViewModel.onAttractionSelect(attractionId)
         val toDetailFragment =
             HomeFragmentDirections.actionHomeFragmentToAttractionDetailFragment(attractionId)
         navController.navigate(toDetailFragment)

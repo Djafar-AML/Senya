@@ -1,6 +1,5 @@
 package com.example.senya.ui.fragment
 
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import com.example.senya.ui.MainActivity
 
@@ -15,8 +14,8 @@ abstract class BaseFragment : Fragment() {
         activityHandler.navController
     }
 
-    protected val attractions by lazy {
-        activityHandler.attractionList
+    protected val activityViewModel by lazy {
+        activityHandler.viewModel
     }
 
     protected fun popBackStack() {

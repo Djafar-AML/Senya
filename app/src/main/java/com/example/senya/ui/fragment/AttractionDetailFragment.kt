@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.navigation.fragment.navArgs
 import com.example.senya.R
 import com.example.senya.data.Attraction
 import com.example.senya.databinding.FragmentAttractionDetailBinding
@@ -17,10 +16,6 @@ class AttractionDetailFragment : BaseFragment() {
 
     private var _binding: FragmentAttractionDetailBinding? = null
     private val binding by lazy { _binding!! }
-
-    private val safeArgs: AttractionDetailFragmentArgs by navArgs()
-
-    private val attraction by lazy { findAttractionById(safeArgs.attractionId) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,15 +28,23 @@ class AttractionDetailFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setActionBarTitle()
-        initViews(attraction)
-        setupClickListeners()
+        setupObservers()
 
     }
 
-    private fun setActionBarTitle() {
+    private fun setupObservers() {
+        activityViewModel.selectedAttractionLiveData.observe(viewLifecycleOwner) { attraction ->
+            attraction?.let {
+                setActionBarTitle(attraction.title)
+                initViews(attraction)
+                setupClickListeners(attraction)
+            }
+        }
+    }
+
+    private fun setActionBarTitle(title: String) {
         binding.actionBarTitleTextView.text =
-            getString(R.string.attraction_action_bar_title, attraction.title)
+            getString(R.string.attraction_action_bar_title, title)
     }
 
     private fun initViews(_attraction: Attraction) {
@@ -59,7 +62,7 @@ class AttractionDetailFragment : BaseFragment() {
         }
     }
 
-    private fun setupClickListeners() {
+    private fun setupClickListeners(attraction: Attraction) {
 
         binding.apply {
 
@@ -69,7 +72,7 @@ class AttractionDetailFragment : BaseFragment() {
 
             numberOfFactsTextView.setOnClickListener {
                 val factsString = attractionFacts(attraction.facts)
-                factAlertDialog(factsString)
+                factAlertDialog(attraction, factsString)
             }
 
         }
@@ -80,17 +83,13 @@ class AttractionDetailFragment : BaseFragment() {
     private fun openInGoogleMap(_attraction: Attraction) {
 
         val uri =
-            Uri.parse("geo:${_attraction.location.latitude},${attraction.location.longitude}")
+            Uri.parse("geo:${_attraction.location.latitude},${_attraction.location.longitude}")
         val mapIntent = Intent(Intent.ACTION_VIEW, uri)
         mapIntent.setPackage("com.google.android.apps.maps")
         startActivity(mapIntent)
 
     }
 
-
-    private fun findAttractionById(attractionId: String): Attraction {
-        return attractions.find { it.id == attractionId } ?: Attraction()
-    }
 
     private fun attractionFacts(facts: List<String>): String {
 
@@ -106,10 +105,10 @@ class AttractionDetailFragment : BaseFragment() {
 
     }
 
-    private fun factAlertDialog(factsString: String) {
+    private fun factAlertDialog(_attraction: Attraction, factsString: String) {
 
         AlertDialog.Builder(requireContext())
-            .setTitle("${attraction.title} facts")
+            .setTitle("${_attraction.title} facts")
             .setMessage(factsString)
             .setPositiveButton("Ok") { dialog, which ->
                 dialog.dismiss()
@@ -119,6 +118,8 @@ class AttractionDetailFragment : BaseFragment() {
     }
 
     override fun onDestroyView() {
+        activityViewModel.resetSelectedAttractionLiveData()
+        activityViewModel.cancelCoroutineScope()
         super.onDestroyView()
         _binding = null
     }

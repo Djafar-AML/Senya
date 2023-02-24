@@ -3,6 +3,7 @@ package com.example.senya.arch
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.senya.data.Attraction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -22,7 +23,10 @@ class AttractionsViewModel @Inject constructor(attractionsRepo: AttractionsRepo)
     val selectedAttractionLiveData: LiveData<Attraction?> = _selectedAttractionLiveData
 
     init {
-        _attractionListLiveData.postValue(attractionsRepo.attractionList)
+        viewModelScope.launch {
+            delay(2_000)
+            _attractionListLiveData.postValue(attractionsRepo.attractionList)
+        }
     }
 
     fun onAttractionSelect(attractionId: String) {

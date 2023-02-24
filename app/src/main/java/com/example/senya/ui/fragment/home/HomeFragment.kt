@@ -16,7 +16,7 @@ class HomeFragment : BaseFragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding by lazy { _binding!! }
 
-    private val homeAdapter by lazy { initHomeFragmentAdapter() }
+    private val homeController by lazy { initHomeFragmentController() }
 
 
     override fun onCreateView(
@@ -32,14 +32,19 @@ class HomeFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setActionBarTitle()
+        showLoading()
         setupObservers()
         setupAdapterScrollListener()
 
     }
 
+    private fun showLoading() {
+        homeController.isLoading = true
+    }
+
     private fun setupObservers() {
         activityViewModel.attractionListLiveData.observe(viewLifecycleOwner) { attractions ->
-            homeAdapter.setData(attractions)
+            homeController.attractions = attractions as ArrayList
         }
     }
 
@@ -51,7 +56,7 @@ class HomeFragment : BaseFragment() {
 
         val state = mutableListOf(0)
 
-        binding.homeRecyclerView.addOnScrollListener(
+        binding.epoxyRecyclerView.addOnScrollListener(
             object : RecyclerView.OnScrollListener() {
 
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -75,15 +80,17 @@ class HomeFragment : BaseFragment() {
         )
     }
 
-    private fun initHomeFragmentAdapter(): HomeFragmentAdapter {
+    private fun initHomeFragmentController(): HomeFragmentController {
 
-        val homeAdapter = HomeFragmentAdapter(::attractionOnClickCallback)
-        binding.homeRecyclerView.apply {
+        val epoxyController = HomeFragmentController(::attractionOnClickCallback)
+
+        binding.epoxyRecyclerView.apply {
+            setController(epoxyController)
             setHasFixedSize(true)
             addItemDecoration(DividerItemDecoration(this.context, RecyclerView.VERTICAL))
-            adapter = homeAdapter
         }
-        return homeAdapter
+
+        return epoxyController
     }
 
     private fun attractionOnClickCallback(attractionId: String) {

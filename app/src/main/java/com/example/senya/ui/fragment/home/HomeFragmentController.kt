@@ -39,12 +39,15 @@ class HomeFragmentController(
 
         val filteredAttractions = filterAttractionList()
 
-        HeaderEpoxyModel("Recently Viewed").id("header_1").addTo(this)
+        if (filteredAttractions.isNotEmpty()) {
 
-        filteredAttractions.forEach { attraction ->
-            AttractionEpoxyModel(attraction, attractionOnClickCallback)
-                .id(attraction.id)
-                .addTo(this)
+            HeaderEpoxyModel("Recently Viewed").id("header_1").addTo(this)
+
+            filteredAttractions.forEach { attraction ->
+                AttractionEpoxyModel(attraction, attractionOnClickCallback)
+                    .id(attraction.id)
+                    .addTo(this)
+            }
         }
 
         HeaderEpoxyModel("All Attractions").id("header_2").addTo(this)

@@ -3,6 +3,7 @@ package com.example.senya.ui.fragment.home
 import com.airbnb.epoxy.EpoxyController
 import com.example.senya.data.Attraction
 import com.example.senya.ui.fragment.epoxy.model.AttractionEpoxyModel
+import com.example.senya.ui.fragment.epoxy.model.HeaderEpoxyModel
 import com.example.senya.ui.fragment.epoxy.model.LoadingEpoxyModel
 
 class HomeFragmentController(
@@ -36,12 +37,30 @@ class HomeFragmentController(
             return
         }
 
+        val filteredAttractions = filterAttractionList()
+
+        HeaderEpoxyModel("Recently Viewed").id("header_1").addTo(this)
+
+        filteredAttractions.forEach { attraction ->
+            AttractionEpoxyModel(attraction, attractionOnClickCallback)
+                .id(attraction.id)
+                .addTo(this)
+        }
+
+        HeaderEpoxyModel("All Attractions").id("header_2").addTo(this)
+
         attractions.forEach { attraction ->
             AttractionEpoxyModel(attraction, attractionOnClickCallback)
                 .id(attraction.id)
                 .addTo(this)
         }
 
+    }
+
+    private fun filterAttractionList(): List<Attraction> {
+        return attractions.filter {
+            it.title.startsWith("s", true) || it.title.startsWith("D", true)
+        }
     }
 
 }

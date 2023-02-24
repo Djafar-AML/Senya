@@ -1,4 +1,4 @@
-package com.example.senya.ui.fragment
+package com.example.senya.ui.fragment.details
 
 import android.content.Intent
 import android.net.Uri
@@ -7,10 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.LinearSnapHelper
 import com.example.senya.R
 import com.example.senya.data.Attraction
 import com.example.senya.databinding.FragmentAttractionDetailBinding
-import com.example.senya.utils.loadByCoil
+import com.example.senya.ui.fragment.BaseFragment
+import com.example.senya.ui.fragment.details.epoxy.HeaderImageEpoxyController
 
 class AttractionDetailFragment : BaseFragment() {
 
@@ -37,6 +39,7 @@ class AttractionDetailFragment : BaseFragment() {
             attraction?.let {
                 setActionBarTitle(attraction.title)
                 initViews(attraction)
+                initImagesRecyclerview(attraction.image_urls)
                 setupClickListeners(attraction)
             }
         }
@@ -54,12 +57,20 @@ class AttractionDetailFragment : BaseFragment() {
             titleTextView.text = _attraction.title
             descriptionTextView.text = _attraction.description
             monthsToVisitTextView.text = _attraction.months_to_visit
-            val imageUrl = _attraction.image_urls[0]
-            headerImageView.loadByCoil(imageUrl)
             numberOfFactsTextView.text =
                 getString(R.string.attraction_facts_count, _attraction.facts.size)
 
         }
+    }
+
+    private fun initImagesRecyclerview(imageUrls: List<String>) {
+
+        binding.apply {
+            headerEpoxyRecyclerview.setControllerAndBuildModels(HeaderImageEpoxyController(imageUrls))
+            LinearSnapHelper().attachToRecyclerView(headerEpoxyRecyclerview)
+            indicator.attachToRecyclerView(headerEpoxyRecyclerview)
+        }
+
     }
 
     private fun setupClickListeners(attraction: Attraction) {

@@ -7,17 +7,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import com.example.senya.R
 import com.example.senya.data.Attraction
 import com.example.senya.databinding.FragmentAttractionDetailBinding
 import com.example.senya.ui.fragment.BaseFragment
+import com.example.senya.ui.fragment.details.epoxy.ContentEpoxyController
 import com.example.senya.ui.fragment.details.epoxy.HeaderImageEpoxyController
 
 class AttractionDetailFragment : BaseFragment() {
 
     private var _binding: FragmentAttractionDetailBinding? = null
     private val binding by lazy { _binding!! }
+    private lateinit var contentEpoxyController: ContentEpoxyController
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,11 +43,15 @@ class AttractionDetailFragment : BaseFragment() {
             attraction?.let {
                 setActionBarTitle(attraction.title)
                 initViews(attraction)
+                initContentEpoxyController(attraction)
+                setupEpoxyLayoutManager()
+                initContentEpoxy()
                 initImagesRecyclerview(attraction.image_urls)
                 setupClickListeners(attraction)
             }
         }
     }
+
 
     private fun setActionBarTitle(title: String) {
         binding.actionBarTitleTextView.text =
@@ -53,14 +61,42 @@ class AttractionDetailFragment : BaseFragment() {
     private fun initViews(_attraction: Attraction) {
 
         binding.apply {
-
             titleTextView.text = _attraction.title
-            descriptionTextView.text = _attraction.description
-            monthsToVisitTextView.text = _attraction.months_to_visit
-            numberOfFactsTextView.text =
-                getString(R.string.attraction_facts_count, _attraction.facts.size)
-
         }
+    }
+
+    private fun initContentEpoxyController(_attraction: Attraction) {
+        contentEpoxyController = ContentEpoxyController(_attraction)
+    }
+
+    private fun setupEpoxyLayoutManager() {
+
+        var isGridMode: Boolean =
+            binding.contentEpoxyRecyclerview.layoutManager is GridLayoutManager
+
+        contentEpoxyController.isGridMode = isGridMode
+
+        contentEpoxyController.onChangeLayoutCallback = {
+
+            if (isGridMode) {
+                binding.contentEpoxyRecyclerview.layoutManager =
+                    LinearLayoutManager(requireContext())
+            } else {
+                binding.contentEpoxyRecyclerview.layoutManager =
+                    GridLayoutManager(requireContext(), 2)
+            }
+
+            isGridMode = !isGridMode
+            contentEpoxyController.isGridMode = isGridMode
+            contentEpoxyController.requestModelBuild()
+        }
+
+    }
+
+    private fun initContentEpoxy() {
+        binding.contentEpoxyRecyclerview.setControllerAndBuildModels(
+            contentEpoxyController
+        )
     }
 
     private fun initImagesRecyclerview(imageUrls: List<String>) {
@@ -80,11 +116,6 @@ class AttractionDetailFragment : BaseFragment() {
             backImageView.setOnClickListener { popBackStack() }
 
             mapImageView.setOnClickListener { openInGoogleMap(attraction) }
-
-            numberOfFactsTextView.setOnClickListener {
-                val factsString = attractionFacts(attraction.facts)
-                factAlertDialog(attraction, factsString)
-            }
 
         }
 

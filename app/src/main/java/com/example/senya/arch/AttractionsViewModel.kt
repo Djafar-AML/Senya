@@ -60,5 +60,9 @@ class AttractionsViewModel @Inject constructor(attractionsRepo: AttractionsRepo)
     fun resetSelectedAttractionLiveData() {
         _selectedAttractionLiveData.postValue(null)
     }
+    override fun onCleared() {
+        super.onCleared()
+        coroutineScope.cancel()
+    }
 
 }

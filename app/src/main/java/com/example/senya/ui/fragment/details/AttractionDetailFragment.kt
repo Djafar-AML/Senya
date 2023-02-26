@@ -160,9 +160,9 @@ class AttractionDetailFragment : BaseFragment() {
     }
 
     override fun onDestroyView() {
-        activityViewModel.resetSelectedAttractionLiveData()
         activityViewModel.cancelCoroutineScope()
         super.onDestroyView()
+        activityViewModel.resetSelectedAttractionLiveData()
         _binding = null
     }
 
